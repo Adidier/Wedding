@@ -3,6 +3,8 @@ import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { FloralDivider, MonogramBox, FlowerAccent, LeafDivider } from '@/components/Decorations'
 import GuestSearch from '@/components/GuestSearch'
+import EventDetails from '@/components/EventDetails'
+import ChurchDetails from '@/components/ChurchDetails'
 
 export const metadata: Metadata = {
   title: 'Bienvenido - Confirmación de Asistencia',
@@ -66,35 +68,26 @@ export default function Home() {
 
         <FloralDivider />
 
-        {/* Wedding Date Card */}
-        <div className="max-w-3xl mx-auto mb-16">
-          <div className="bg-white rounded-2xl shadow-2xl p-10 md:p-14 border-b-4 border-wedding-primary relative overflow-hidden">
-            {/* Decorative corners */}
-            <div className="absolute top-4 left-4 text-3xl opacity-20">✿</div>
-            <div className="absolute top-4 right-4 text-3xl opacity-20">✿</div>
-            <div className="absolute bottom-4 left-4 text-3xl opacity-20">✿</div>
-            <div className="absolute bottom-4 right-4 text-3xl opacity-20">✿</div>
-
-            <div className="mb-8">
-              <p className="text-sm text-wedding-gray uppercase tracking-widest font-semibold mb-3">La Gran Fecha</p>
-              <p className="text-4xl md:text-5xl font-bold text-wedding-primary capitalize mb-2">
-                {dayName}
-              </p>
-              <p className="text-2xl md:text-3xl text-wedding-sand font-light">
-                {formattedDate}
-              </p>
-            </div>
-            
-            <LeafDivider />
-
-            <div className="border-t-2 border-wedding-light pt-6">
-              <div className="flex items-center justify-center gap-3 text-lg text-wedding-primary font-semibold">
-                <span>📍</span>
-                <span>Hacienda de Comodejé</span>
-              </div>
-            </div>
-          </div>
+        {/* Wedding Date and Location Card */}
+        <div className="mb-16">
+          <EventDetails 
+            date={weddingDate}
+            location="Hacienda de Comodejé"
+            mapUrl="https://maps.app.goo.gl/vZdCR8rRrzjf2VTp9"
+          />
         </div>
+
+        <FloralDivider />
+
+        {/* Church Ceremony Card */}
+        <div className="mb-16">
+          <ChurchDetails
+            churchName="Iglesia Del Señor de El Calvario"
+            address="Ubicación de la iglesia para la celebración religiosa"
+          />
+        </div>
+
+        <FloralDivider />
 
         {/* Call to Action - RSVP */}
         <div className="max-w-3xl mx-auto mb-16">
@@ -116,7 +109,7 @@ export default function Home() {
                 </a>
                 <div className="hidden sm:block text-2xl opacity-50">→</div>
                 <div className="bg-white/20 backdrop-blur text-white px-6 py-4 rounded-full font-semibold text-base">
-                  ⏰ Antes del {formattedDeadline}
+                  ⏰ Antes del 19 de septiembre
                 </div>
               </div>
             </div>

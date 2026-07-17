@@ -7,6 +7,7 @@ interface GuestData {
   id: string
   nombre: string
   email: string
+  numPersonas?: number
 }
 
 interface RSVPFormProps {
@@ -64,6 +65,21 @@ export default function RSVPForm({ guest, onSubmit }: RSVPFormProps) {
       </div>
       
       <LeafDivider />
+
+      {/* Boletos Asignados */}
+      {guest.numPersonas && (
+        <div className="mb-10 mt-10 p-6 bg-gradient-to-r from-wedding-primary/10 to-wedding-rose/10 rounded-xl border-2 border-wedding-primary/30">
+          <div className="text-center">
+            <p className="text-wedding-gray text-sm uppercase tracking-widest font-semibold mb-2">Tu Asignación</p>
+            <div className="flex items-center justify-center gap-3">
+              <span className="text-4xl">🍃</span>
+              <p className="text-3xl font-bold text-wedding-primary">{guest.numPersonas} Boleto{guest.numPersonas !== 1 ? 's' : ''}</p>
+              <span className="text-4xl">🍃</span>
+            </div>
+            <p className="text-wedding-gray text-sm mt-3">Para ti{guest.numPersonas > 1 ? ' y ' + (guest.numPersonas - 1) + ' acompañante' + (guest.numPersonas > 2 ? 's' : '') : ''}</p>
+          </div>
+        </div>
+      )}
 
       {/* Attendance Selection */}
       <div className="mb-12 mt-10">

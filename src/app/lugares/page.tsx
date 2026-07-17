@@ -84,10 +84,7 @@ export default function LugaresPage() {
                       <span>🕑</span>
                       <span className="font-semibold">16:00 (4:00 PM)</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span>📍</span>
-                      <span className="font-semibold">Hacienda de Comodejé</span>
-                    </div>
+
                     <p className="text-sm italic mt-4">
                       Celebremos juntos con comida, música y diversión hasta aproximadamente la 1:00 AM.
                     </p>
@@ -142,14 +139,10 @@ export default function LugaresPage() {
           {/* Hacienda de Comodejé */}
           <div className="bg-white rounded-2xl shadow-xl p-8 border-t-4 border-wedding-rose">
             <h3 className="text-2xl font-bold text-wedding-primary mb-6 flex items-center gap-2">
-              🎉 Hacienda de Comodejé
             </h3>
             
             <div className="space-y-4 text-wedding-gray">
-              <div>
-                <p className="font-bold text-wedding-primary mb-1">📍 Ubicación</p>
-                <p className="text-sm">Hacienda de Comodejé</p>
-              </div>
+
 
               <div>
                 <p className="font-bold text-wedding-primary mb-1">🕐 Horario</p>

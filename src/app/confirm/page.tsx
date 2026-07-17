@@ -105,6 +105,10 @@ export default function ConfirmPage() {
               <h2 className="text-lg font-bold text-wedding-primary mb-4">Resumen de tu confirmación:</h2>
               <div className="space-y-3">
                 <div>
+                  <span className="font-semibold text-wedding-primary">Boletos Asignados:</span>
+                  <span className="ml-2 text-wedding-gray text-lg font-bold">🎟️ {guest.numPersonas}</span>
+                </div>
+                <div>
                   <span className="font-semibold text-wedding-primary">Asistencia:</span>
                   <span className="ml-2 text-wedding-gray">
                     {submittedData?.attendance ? '✅ Sí, estaré presente' : '❌ Lamentablemente no podré asistir'}
