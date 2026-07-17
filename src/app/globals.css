@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #F7F2E7;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Wedding Theme */
+@layer components {
+  .wedding-gradient {
+    @apply bg-gradient-to-r from-[#B42150] via-[#F9B2A0] to-[#F2B705];
+  }
+
+  .wedding-card {
+    @apply bg-white rounded-2xl shadow-lg border border-[#CFC3BC]/20;
+  }
+
+  .wedding-btn-primary {
+    @apply bg-[#B42150] hover:bg-[#B42150]/90 text-white font-bold py-3 px-6 rounded-lg transition-all hover:shadow-lg;
+  }
+
+  .wedding-input {
+    @apply border-2 border-[#CFC3BC] rounded-lg focus:border-[#B42150] focus:outline-none transition-all px-4 py-2;
+  }
+}
+
+/* Smooth animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
