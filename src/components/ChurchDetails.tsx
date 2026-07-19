@@ -6,6 +6,7 @@ interface ChurchDetailsProps {
 }
 
 export default function ChurchDetails({ churchName, address }: ChurchDetailsProps) {
+  const mapsUrl = 'https://maps.app.goo.gl/vZdCR8rRrzjf2VTp9'
   return (
     <div className="max-w-4xl mx-auto">
       <div className="bg-white rounded-2xl shadow-2xl p-10 md:p-14 relative overflow-hidden">
@@ -52,6 +53,16 @@ export default function ChurchDetails({ churchName, address }: ChurchDetailsProp
             <span>{churchName}</span>
           </div>
           <p className="text-wedding-gray text-sm">{address}</p>
+          <div className="mt-3">
+            <a
+              href={mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-wedding-primary text-white px-8 py-3 rounded-full font-semibold hover:bg-wedding-rose hover:shadow-lg transition-all transform hover:scale-105"
+            >
+              🗺️ Ver en Google Maps
+            </a>
+          </div>
         </div>
       </div>
     </div>

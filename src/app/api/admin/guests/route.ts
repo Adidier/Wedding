@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { getAllGuests } from '@/lib/gcp/sheets'
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // TODO: Implementar autenticación para el admin
     // Por ahora, cualquiera puede acceder. Considera agregar:

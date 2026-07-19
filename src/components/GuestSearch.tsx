@@ -1,20 +1,54 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { SAMPLE_INVITATIONS } from '@/lib/sampleInvitations'
 import { LeafDivider } from './Decorations'
 
 export default function GuestSearch() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const token = searchParams?.get('token')
+
   const [searchInput, setSearchInput] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [groupInfo, setGroupInfo] = useState<any | null>(null)
+
+  useEffect(() => {
+    // If a token is present in the URL, fetch the group/guest info and show the fixed name
+    if (!token) return
+
+    const fetchGroup = async () => {
+      try {
+        setLoading(true)
+        const resp = await fetch(`/api/groups/${token}`)
+        if (!resp.ok) throw new Error('Group not found')
+        const g = await resp.json()
+        setGroupInfo(g)
+      } catch (err) {
+        // Fallback to SAMPLE_INVITATIONS grouping
+        const map: Record<string, any[]> = {}
+        for (const s of SAMPLE_INVITATIONS as any[]) {
+          const group = s.group || 'Unknown'
+          if (!map[group]) map[group] = []
+          map[group].push(s)
+        }
+        const found = Object.keys(map).map((g) => ({ groupName: g, token: g && g.length ? g : '', members: map[g] })).find((gg) => gg.token === token || gg.token === token)
+        if (found) setGroupInfo(found)
+        else setError('No se encontró el token provisto')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchGroup()
+  }, [token])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
-    
+
     if (!searchInput.trim()) {
       setError('Por favor ingresa tu nombre')
       return
@@ -22,10 +56,11 @@ export default function GuestSearch() {
 
     setLoading(true)
 
-    // Buscar al invitado por nombre (case-insensitive)
-    const guest = SAMPLE_INVITATIONS.find(
-      (inv) => inv.name.toLowerCase().includes(searchInput.toLowerCase())
-    )
+    // Buscar al invitado por nombre (case-insensitive). Support both `name` and `nombre` fields.
+    const guest = SAMPLE_INVITATIONS.find((inv: any) => {
+      const nm = (inv.name || inv.nombre || '').toString()
+      return nm.toLowerCase().includes(searchInput.toLowerCase())
+    })
 
     if (guest) {
       // Redirigir a la página de confirmación con el token
@@ -34,6 +69,31 @@ export default function GuestSearch() {
       setError(`No encontramos tu nombre "${searchInput}". Por favor verifica que esté correcto.`)
       setLoading(false)
     }
+  }
+
+  // If token present and we have groupInfo, show fixed name(s)
+  if (token) {
+    return (
+      <div className="max-w-2xl mx-auto mb-16">
+        <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 border-t-4 border-wedding-primary relative overflow-hidden">
+          <h2 className="text-3xl font-bold text-wedding-primary mb-2 text-center">Tu Invitación</h2>
+          {loading && <p className="text-center text-gray-500">Cargando...</p>}
+          {error && <p className="text-center text-red-600">{error}</p>}
+          {groupInfo && (
+            <div className="text-center">
+              <p className="text-xl text-gray-600 mb-2">Grupo:</p>
+              <h3 className="text-4xl font-bold text-wedding-primary mb-4">{groupInfo.groupName || 'Invitados'}</h3>
+              <p className="text-gray-700 mb-4">Miembros del grupo:</p>
+              <ul className="space-y-2 text-left inline-block">
+                {groupInfo.members.map((m: any) => (
+                  <li key={m.id} className="px-4 py-2 border rounded-md">{m.name || m.nombre}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -98,6 +158,21 @@ export default function GuestSearch() {
         <p className="text-center text-wedding-gray text-sm mt-6">
           Si tienes problemas, contáctanos a través del email en tu invitación original
         </p>
+        <div className="mt-4 text-sm text-gray-600">
+          <div className="mb-2 font-semibold text-gray-700">Nombres de ejemplo (clic para autocompletar):</div>
+          <div className="flex flex-wrap gap-2">
+            {SAMPLE_INVITATIONS.map((s: any) => (
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => setSearchInput((s.name || s.nombre || '').toString())}
+                className="px-3 py-1 bg-wedding-sand rounded-full text-sm hover:bg-wedding-primary/10"
+              >
+                {s.name || s.nombre}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )

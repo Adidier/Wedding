@@ -1,5 +1,5 @@
 # Wedding RSVP Application
-
+./scripts/deploy_gcp.sh --region=us-central1 --service=wedding-app-524643745004
 Una aplicación web moderna para gestionar confirmaciones de asistencia a tu boda usando Google Sheets como base de datos.
 
 ## Características
@@ -225,3 +225,35 @@ Para más ayuda, consulta:
 ---
 
 Hecha con ❤️ para tu boda especial
+
+## Añadir columna `Token` en Google Sheets
+
+Si quieres que cada grupo tenga un token determinístico (hash SHA-256 corto del nombre del grupo), tienes dos opciones:
+
+1) Apps Script (fácil, visible en la hoja):
+
+- Abre la hoja → Extensiones → Apps Script
+- Crea un nuevo archivo de script y pega el contenido de `scripts/token_apps_script.gs` en este repositorio.
+- Guarda. En la hoja añade una columna `Token` y en la primera fila de datos usa la fórmula:
+
+```
+=TOKEN_FOR_GROUP(C2)
+```
+
+  (donde `C2` es la celda con el nombre del grupo). Arrastra hacia abajo para copiar.
+
+- O corre la función `fillTokenColumn` desde el editor de Apps Script para rellenar automáticamente la columna `Token` (busca la columna `Group`/`Grupo` automáticamente).
+
+2) Desde el servidor (recomendado para migraciones en bloque):
+
+- Ya existe un endpoint en la app que escribe tokens en la hoja: `POST /api/admin/generate-tokens`.
+- Requiere credenciales de servicio (las mismas que usa la app para acceder a la hoja). Para ejecutarlo localmente:
+
+```
+curl -X POST http://localhost:3000/api/admin/generate-tokens
+```
+
+Esto creará la columna `Token` si no existe y escribirá la primera parte del hash (12 hex chars) para cada fila.
+
+Elige Apps Script si prefieres editar la hoja directamente; usa el endpoint si quieres una escritura consistente desde el backend o para migrar datos en bloque.
+

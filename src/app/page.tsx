@@ -3,13 +3,18 @@ import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { FloralDivider, MonogramBox, FlowerAccent, LeafDivider } from '@/components/Decorations'
 import GuestSearch from '@/components/GuestSearch'
+import ConfirmButton from '@/components/ConfirmButton'
 import EventDetails from '@/components/EventDetails'
 import ChurchDetails from '@/components/ChurchDetails'
+import GroupPreview from '@/components/GroupPreview'
 
 export const metadata: Metadata = {
   title: 'Bienvenido - Confirmación de Asistencia',
   description: 'Confirma tu asistencia a nuestra boda',
 }
+
+// Force dynamic rendering to avoid prerender errors for client hooks
+export const dynamic = 'force-dynamic'
 
 export default function Home() {
   const weddingDate = new Date(process.env.NEXT_PUBLIC_WEDDING_DATE || '2026-11-07')
@@ -45,6 +50,9 @@ export default function Home() {
 
         {/* Guest Search */}
         <GuestSearch />
+
+        {/* If token present in URL, show a preview of group members */}
+        <GroupPreview />
 
         {/* Frases Personalizadas */}
         <div className="max-w-4xl mx-auto mb-16">
@@ -101,17 +109,13 @@ export default function Home() {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 items-center">
-                <a
-                  href="/confirm"
-                  className="inline-block bg-white text-wedding-primary px-8 py-4 rounded-full font-bold text-lg hover:bg-wedding-light hover:shadow-lg transition-all transform hover:scale-105 cursor-pointer"
-                >
-                  ✅ Confirmar Asistencia
-                </a>
-                <div className="hidden sm:block text-2xl opacity-50">→</div>
-                <div className="bg-white/20 backdrop-blur text-white px-6 py-4 rounded-full font-semibold text-base">
-                  ⏰ Antes del 19 de septiembre
-                </div>
-              </div>
+                    {/* Confirm button uses client component to preserve token in querystring when present */}
+                    <ConfirmButton />
+                    <div className="hidden sm:block text-2xl opacity-50">→</div>
+                    <div className="bg-white/20 backdrop-blur text-white px-6 py-4 rounded-full font-semibold text-base">
+                      ⏰ Antes del 19 de septiembre
+                    </div>
+                  </div>
             </div>
           </div>
         </div>

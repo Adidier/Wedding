@@ -162,6 +162,45 @@ npm run dev
 
 ---
 
+## 🛳️ Despliegue recomendado: Cloud Run
+
+1. Asegúrate de tener instalado y autenticado el SDK de Google Cloud:
+
+```bash
+gcloud auth login
+gcloud config set project YOUR_PROJECT_ID
+```
+
+2. Construye y sube la imagen con Cloud Build (usa el `cloudbuild.yaml` incluido):
+
+```bash
+gcloud builds submit --substitutions=_REPO_NAME=wedding-app
+```
+
+3. Despliega a Cloud Run (reemplaza `REGION` y `SERVICE_NAME`):
+
+```bash
+gcloud run deploy SERVICE_NAME \
+   --image gcr.io/$GOOGLE_CLOUD_PROJECT/wedding-app:$SHORT_SHA \
+   --platform managed \
+   --region REGION \
+   --allow-unauthenticated \
+   --set-env-vars NEXT_PUBLIC_GOOGLE_SHEETS_ID=YOUR_SHEET_ID \
+   --set-secrets GCP_PRIVATE_KEY=projects/PROJECT/secrets/PRIVATE_KEY:latest
+```
+
+4. Alternativamente, puedes desplegar directamente con una única línea (build + deploy):
+
+```bash
+gcloud builds submit --tag gcr.io/$GOOGLE_CLOUD_PROJECT/wedding-app && \
+gcloud run deploy wedding-app --image gcr.io/$GOOGLE_CLOUD_PROJECT/wedding-app --region REGION --platform managed --allow-unauthenticated
+```
+
+5. Después del despliegue: en la consola de Cloud Run, agrega variables de entorno sensibles (credenciales GCP) usando Secret Manager / variables en la UI.
+
+
+---
+
 ## 🧪 PROBAR LA APLICACIÓN
 
 1. Abre [http://localhost:3001](http://localhost:3001)
